@@ -174,15 +174,19 @@ static void cmdDispatch(SpeechContext* ctx, const char* arg) {
 static void cmdSetNextLang(SpeechContext* ctx, const char* arg) {
   int sayIt = 0;
   sscanf(arg, "%d", &sayIt);
-  if (LangManagerNext(ctx->lang, sayIt) == SPEECH_ERR_SET_VOICE)
+  if (LangManagerNext(ctx->lang, sayIt) == SPEECH_ERR_SET_VOICE) {
     SpeechQueuePushNextVoice(ctx->queue, sayIt);
+    SpeechQueueDispatch(ctx->queue);
+  }
 }
 
 static void cmdSetPreviousLang(SpeechContext* ctx, const char* arg) {
   int sayIt = 0;
   sscanf(arg, "%d", &sayIt);
-  if (LangManagerPrevious(ctx->lang, sayIt) == SPEECH_ERR_SET_VOICE)
+  if (LangManagerPrevious(ctx->lang, sayIt) == SPEECH_ERR_SET_VOICE) {
     SpeechQueuePushPreviousVoice(ctx->queue, sayIt);
+    SpeechQueueDispatch(ctx->queue);
+  }
 }
 
 static void cmdSetLang(SpeechContext* ctx, const char* arg) {
@@ -197,8 +201,10 @@ static void cmdSetLang(SpeechContext* ctx, const char* arg) {
   next = skipToken(arg, " ");
   if (next) sscanf(next, "%d", &sayIt);
   if (spec[0] == '\0') return;
-  if (LangManagerSetLang(ctx->lang, spec, sayIt) == SPEECH_ERR_SET_VOICE)
+  if (LangManagerSetLang(ctx->lang, spec, sayIt) == SPEECH_ERR_SET_VOICE) {
     SpeechQueuePushVoice(ctx->queue, spec, sayIt);
+    SpeechQueueDispatch(ctx->queue);
+  }
 }
 
 static void cmdSetPreferredLang(SpeechContext* ctx, const char* arg) {

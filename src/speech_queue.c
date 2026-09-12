@@ -172,7 +172,7 @@ void SpeechQueueTick(SpeechQueuePtr q) {
     advance(q);
     return;
   }
-  if (q->head) advance(q);
+  if (q->dispatching && q->head) advance(q);
 }
 
 double SpeechQueueSecondsUntilNextEvent(SpeechQueuePtr q) {
